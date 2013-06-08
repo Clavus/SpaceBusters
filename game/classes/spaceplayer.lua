@@ -1,39 +1,34 @@
 
-RPGPlayer = class("RPGPlayer", Player)
+SpacePlayer = class("SpacePlayer", Player)
 
-local attack_duration = 1/6 -- third of a second
-
-function RPGPlayer:initialize( world )
+function SpacePlayer:initialize( world )
 
 	Entity.initialize(self)
 
-	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["character"], FOLDER.ASSETS.."char_sheet64.png", Vector(0,0), Vector(64,64), Vector(32,32) )
-	self._attackeffect = StateAnimatedSprite( SPRITELAYOUT["effect_attack"], FOLDER.ASSETS.."effects64.png", Vector(0,0), Vector(64,64), Vector(32,32) )
+	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."ship_test.png", Vector(0,0), Vector(128,128), Vector(64,64) )
 	self.velocity = Vector(0,0)
 	self.move_speed = 196
-	self.last_attack = -100
-	self.is_attacking = false
 	
-	self._body = love.physics.newBody(world, 0, 0, "dynamic")
+	self._body = love.physics.newBody(world, 0, 0, "kinematic")
 	self._body:setMass(1)
 	self._shape = love.physics.newCircleShape(0, 16, 16)
 	self._fixture = love.physics.newFixture(self._body, self._shape)
 	self._fixture:setUserData(self)
 	
-	self._animstate = "movedown"
+	self._animstate = "default"
 	self._charsprite:setState(self._animstate)
 	
 end
 
-function RPGPlayer:update( dt )
+function SpacePlayer:update( dt )
 	
 	self._charsprite:update(dt)
 	
 end
 
-function RPGPlayer:draw()
+function SpacePlayer:draw()
 	
-	self._charsprite:draw(pos.x, pos.y)
-	
+	local x, y = self:getPos()
+	self._charsprite:draw(x, y)
 	
 end

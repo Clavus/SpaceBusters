@@ -65,7 +65,7 @@ function EntityManager:preDraw()
 	
 		self._drawlist = { _final = {} }
 		local layer
-		local campos = level:getCamera():getTargetPos()
+		local campos = Vector(level:getCamera():getTargetPos())
 		
 		for k, ent in pairs( self._entities ) do
 			

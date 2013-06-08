@@ -14,16 +14,19 @@ function Entity:initialize()
 	
 end
 
-function Entity:setPos( vec )
+function Entity:setPos( x, y )
 	
-	assert(vec.class.name == "Vector", "Vector expected, got "..type(vec))
-	self._pos = vec
+	assertDebug(type(x) == "number", "Number expected, got "..type(x))
+	assertDebug(type(y) == "number", "Number expected, got "..type(y))
+	
+	self._pos.x = x
+	self._pos.y = y
 
 end
 
 function Entity:getPos()
 
-	return self._pos:copy()
+	return self._pos.x, self._pos.y
 
 end
 
@@ -42,20 +45,19 @@ end
 -- gets the layer name where this entity is drawn on
 function Entity:getDrawLayer()
 
-	return "world_lvl1"
+	return DRAW_LAYER_TOP
 	
 end
 
 function Entity:getDrawBoundingBox()
 	
-	local pos = self:getPos()
-	return pos.x - 32, pos.y - 32, 64, 64
+	return self._pos.x - 32, self._pos.y - 32, 64, 64
 	
 end
 
 function Entity:getDepth()
 	
-	return -self:getPos().y + self._relative_depth
+	return -self._pos.y + self._relative_depth
 	
 end
 

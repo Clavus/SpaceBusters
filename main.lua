@@ -5,8 +5,12 @@ require("engine/engine")
 require("game/game")
 
 local _curTime
+assertDebug = function() end
 
 function love.load()
+	
+	-- Disable this on release
+	assertDebug = assert
 	
 	_curTime = 0
 	input = InputController()
@@ -25,7 +29,7 @@ end
 
 function love.draw()
 	
-	love.graphics.setBackgroundColor( 130, 205, 190 )
+	love.graphics.setBackgroundColor( 0, 0, 0 )
 	love.graphics.clear()
 	game.draw()
 	

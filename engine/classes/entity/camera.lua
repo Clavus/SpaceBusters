@@ -35,22 +35,14 @@ end
 
 function Camera:getTargetPos()
 	
-	return self._targetpos:copy()
+	return self._targetpos.x, self._targetpos.y
 	
 end
 
-function Camera:setPos( pos )
+function Camera:moveTo( x, y, duration )
 	
-	Entity.setPos(self, pos)
-	self._refpos = pos
-	self._targetpos = pos
-	self._easingstart = -100
-	
-end
-
-function Camera:moveTo( pos, duration )
-	
-	self._targetpos = pos
+	self._targetpos.x = x
+	self._targetpos.y = y
 	self._refpos = self._pos:copy()
 	self._easingstart = engine.currentTime()
 	self._easingduration = duration
@@ -94,10 +86,11 @@ function Camera:isRectInView( x, y, w, h )
 	
 end
 
-function Camera:setScale( sv )
-
-	assert(sv.class and sv.class.name == "Vector", "Vector expected, got "..type(sv))
-	self._scale = sv
+function Camera:setScale( x, y )
+	
+	y = y or x
+	self._scale.x = x
+	self._scale.y = y
 
 end
 
@@ -109,7 +102,7 @@ end
 
 function Camera:setAngle( r )
 
-	assert(type(r) == "number", "Number expected, got "..type(r))
+	assertDebug(type(r) == "number", "Number expected, got "..type(r))
 	self._angle = r
 	
 end

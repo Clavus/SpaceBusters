@@ -5,13 +5,26 @@ require("game/ai_machines")
 
 require("game/classes/spaceplayer")
 
+local bkg_img, bkg_quad
+local player, world, camera
+
 function game.load()
 	
 	gui = GUI()
 	level = Level(LevelData())
 	level:setCollisionCallbacks(game.collisionBeginContact, game.collisionEndContact, game.collisionPreSolve, game.collisionPostSolve)
+	world = level:getPhysicsWorld()
+	camera = level:getCamera()
 	
+	player = level:createEntity("SpacePlayer", world)
+	player:setPos( 200, 200 )
+
 	input:addKeyReleaseCallback("restart", "r", function() love.load() end)
+	
+	camera:setScale(0.25)
+	
+	bkg_img = resource.getImage(FOLDER.ASSETS.."background_test.jpg", "repeat")
+	bkg_quad = love.graphics.newQuad(0, 0, camera:getWidth(), camera:getHeight(), bkg_img:getWidth(), bkg_img:getHeight())
 	
 	print("Game initialized")
 	
@@ -25,9 +38,15 @@ function game.update( dt )
 end
 
 function game.draw()
-
+	
 	level:draw()
 	gui:draw()
+	
+end
+
+function game.drawBackground()
+	
+	love.graphics.drawq(bkg_img, bkg_quad, 0, 0)
 	
 end
 

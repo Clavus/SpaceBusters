@@ -44,6 +44,7 @@ end
 function Level:draw()
 
 	self._camera:preDraw()
+	game.drawBackground()
 	self._entManager:preDraw()
 	
 	for k, layer in ipairs( self._leveldata:getLayers() ) do

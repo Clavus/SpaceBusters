@@ -22,14 +22,17 @@ function Player:draw()
 	
 end
 
-function Player:setPos( vec )
+function Player:setPos( x, y )
 
-	self._body:setPosition(vec.x, vec.y)
+	assertDebug(type(x) == "number", "Number expected, got "..type(x))
+	assertDebug(type(y) == "number", "Number expected, got "..type(y))
+	
+	self._body:setPosition(x, y)
 
 end
 
 function Player:getPos()
 
-	return Vector(self._body:getPosition())
+	return self._body:getPosition()
 	
 end
