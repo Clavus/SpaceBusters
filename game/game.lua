@@ -18,10 +18,12 @@ function game.load()
 	
 	player = level:createEntity("SpacePlayer", world)
 	player:setPos( 500, 500 )
-
+	
+	camera:track(player)
+	
 	input:addKeyReleaseCallback("restart", "r", function() love.load() end)
 	
-	camera:setScale(0.25)
+	camera:setScale(0.333)
 	
 	bkg_img = resource.getImage(FOLDER.ASSETS.."background_test.jpg", "repeat")
 	bkg_quad = love.graphics.newQuad(0, 0, camera:getWidth(), camera:getHeight(), bkg_img:getWidth(), bkg_img:getHeight())
@@ -46,7 +48,10 @@ end
 
 function game.drawBackground()
 	
-	love.graphics.drawq(bkg_img, bkg_quad, 0, 0)
+	local x, y, w, h = bkg_quad:getViewport()
+	local cx, cy = camera:getPos()
+	bkg_quad:setViewport(cx, cy, w, h)
+	love.graphics.drawq(bkg_img, bkg_quad, camera:getPos())
 	
 end
 

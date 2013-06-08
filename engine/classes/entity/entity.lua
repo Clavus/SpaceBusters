@@ -44,6 +44,12 @@ function Entity:getAngle()
 	
 end
 
+function Entity:getCameraTrackingPos()
+	
+	return self:getPos()
+	
+end
+
 function Entity:update( dt )
 
 end

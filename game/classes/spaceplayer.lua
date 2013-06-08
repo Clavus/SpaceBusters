@@ -5,7 +5,7 @@ function SpacePlayer:initialize( world )
 
 	Entity.initialize(self)
 
-	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."ship_test.png", Vector(0,0), Vector(128,128), Vector(64,64) )
+	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."playership.png", Vector(0,0), Vector(96, 96), Vector(48, 48) )
 	self.velocity = Vector(0,0)
 	self.move_speed = 196
 	
@@ -26,10 +26,9 @@ function SpacePlayer:update( dt )
 	
 	if (input:keyIsDown(INPUT.FORWARD)) then
 		local forward = angle.forward( self:getAngle() ) * 10000
-		print("Applying force "..tostring(forward))
 		--self._body:setLinearVelocity( forward.x, forward.y )
 		self._body:applyForce( forward.x, forward.y )
-	elseif (input:keyIsDown(INPUT.FORWARD)) then
+	elseif (input:keyIsDown(INPUT.BACKWARD)) then
 		
 	end
 	
@@ -48,5 +47,13 @@ function SpacePlayer:draw()
 	self._charsprite:draw(x, y, self:getAngle())
 	
 	Player.draw(self)
+	
+end
+
+function SpacePlayer:getCameraTrackingPos()
+	
+	local forward = angle.forward( self:getAngle() ) * 100
+	local px, py = self:getPos()
+	return px + forward.x, py + forward.y
 	
 end

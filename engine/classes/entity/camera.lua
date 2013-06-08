@@ -5,6 +5,8 @@ function Camera:initialize()
 	
 	Entity.initialize(self)
 	
+	self._mode = "static"
+	
 	self._angle = 0
 	self._scale = Vector(1,1)
 	self._pos = Vector(0,0)
@@ -19,12 +21,22 @@ end
 
 function Camera:update(dt)
 	
-	local t = engine.currentTime() - self._easingstart
-	if (t <= self._easingduration) then
-		self._pos.x = self._easingfunc(t, self._refpos.x, self._targetpos.x - self._refpos.x, self._easingduration)
-		self._pos.y = self._easingfunc(t, self._refpos.y, self._targetpos.y - self._refpos.y, self._easingduration)
-	else
-		self._pos = self._targetpos
+	if (self._mode == "static") then
+	
+		local t = engine.currentTime() - self._easingstart
+		if (t <= self._easingduration) then
+			self._pos.x = self._easingfunc(t, self._refpos.x, self._targetpos.x - self._refpos.x, self._easingduration)
+			self._pos.y = self._easingfunc(t, self._refpos.y, self._targetpos.y - self._refpos.y, self._easingduration)
+		else
+			self._pos = self._targetpos
+		end
+		
+	elseif (self._mode == "track") then
+		
+		local tx, ty = self:getTargetPos()
+		self._pos.x = math.approach(self._pos.x, tx - self:getWidth()/2, math.abs(tx - self:getWidth()/2 - self._pos.x)*7*dt)
+		self._pos.y = math.approach(self._pos.y, ty - self:getHeight()/2, math.abs(ty - self:getHeight()/2 - self._pos.y)*7*dt)
+		
 	end
 	
 	--self._pos.x = self._pos.x + 50*dt
@@ -35,11 +47,24 @@ end
 
 function Camera:getTargetPos()
 	
-	return self._targetpos.x, self._targetpos.y
+	if (self._mode == "static") then
+		return self._targetpos.x, self._targetpos.y
+	else
+		return self._trackent:getCameraTrackingPos()
+	end
+	
+end
+
+function Camera:track( ent )
+	
+	self._mode = "track"
+	self._trackent = ent
 	
 end
 
 function Camera:moveTo( x, y, duration )
+	
+	self._mode = "static"
 	
 	self._targetpos.x = x
 	self._targetpos.y = y
@@ -100,15 +125,9 @@ function Camera:getScale()
 
 end
 
-function Camera:setAngle( r )
-
-	assertDebug(type(r) == "number", "Number expected, got "..type(r))
-	self._angle = r
+function Camera:getPos()
+	
+	return math.round(self._pos.x), math.round(self._pos.y)
 	
 end
 
-function Camera:getAngle( r )
-
-	return self._angle
-
-end
