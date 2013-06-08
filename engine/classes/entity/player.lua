@@ -36,3 +36,15 @@ function Player:getPos()
 	return self._body:getPosition()
 	
 end
+
+function Player:setAngle( r )
+	
+	return self._body:setAngle( r )
+	
+end
+
+function Player:getAngle()
+	
+	return self._body:getAngle()
+	
+end

@@ -1,8 +1,8 @@
 
 INPUT = {}
-INPUT.MOVELEFT = "left"
-INPUT.MOVERIGHT = "right"
-INPUT.MOVEUP = "up"
-INPUT.MOVEDOWN = "down"
-INPUT.ATTACK = " " -- space
+INPUT.TURNLEFT = "a"
+INPUT.TURNRIGHT = "d"
+INPUT.FORWARD = "w"
+INPUT.BACKWARD = "s"
+INPUT.ATTACK = "space"
 

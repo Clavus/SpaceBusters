@@ -6,7 +6,7 @@ function Level:initialize( leveldata )
 	self._leveldata = leveldata
 	self._camera = Camera()
 	
-	love.physics.setMeter(1)
+	love.physics.setMeter(10)
     self._physworld = love.physics.newWorld(0, 0, false)
 	
 	local objects = nil

@@ -6,6 +6,7 @@ local entCounter = 0
 function Entity:initialize()
 	
 	self._pos = Vector(0,0)
+	self._angle = 0
 	self._index = _entIndex
 	self._relative_depth = 0
 	
@@ -28,6 +29,19 @@ function Entity:getPos()
 
 	return self._pos.x, self._pos.y
 
+end
+
+function Entity:setAngle( r )
+	
+	assertDebug(type(r) == "number", "Number expected, got "..type(r))
+	self._angle = r
+	
+end
+
+function Entity:getAngle()
+	
+	return self._angle
+	
 end
 
 function Entity:update( dt )

@@ -17,7 +17,7 @@ function game.load()
 	camera = level:getCamera()
 	
 	player = level:createEntity("SpacePlayer", world)
-	player:setPos( 200, 200 )
+	player:setPos( 500, 500 )
 
 	input:addKeyReleaseCallback("restart", "r", function() love.load() end)
 	
