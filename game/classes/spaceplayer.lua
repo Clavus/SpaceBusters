@@ -23,11 +23,22 @@ end
 function SpacePlayer:update( dt )
 	
 	self._charsprite:update(dt)
+	local v = Vector(self._body:getLinearVelocity())
+	if (v:length() > 2000) then
+		v:normalize():multiplyBy(2000)
+		self._body:setLinearVelocity( v.x, v.y )
+	end
+	
+	--print("velocity: "..tostring(v.x)..", "..tostring(v.y))
 	
 	if (input:keyIsDown(INPUT.FORWARD)) then
-		local forward = angle.forward( self:getAngle() ) * 10000
+		
+		local forward = angle.forward( self:getAngle() ) * 30000
 		--self._body:setLinearVelocity( forward.x, forward.y )
 		self._body:applyForce( forward.x, forward.y )
+		
+		
+		
 	elseif (input:keyIsDown(INPUT.BACKWARD)) then
 		
 	end

@@ -34,8 +34,8 @@ function Camera:update(dt)
 	elseif (self._mode == "track") then
 		
 		local tx, ty = self:getTargetPos()
-		self._pos.x = math.approach(self._pos.x, tx - self:getWidth()/2, math.abs(tx - self:getWidth()/2 - self._pos.x)*7*dt)
-		self._pos.y = math.approach(self._pos.y, ty - self:getHeight()/2, math.abs(ty - self:getHeight()/2 - self._pos.y)*7*dt)
+		self._pos.x = math.approach(self._pos.x, tx - self:getWidth()/2, math.abs(tx - self:getWidth()/2 - self._pos.x)*20*dt)
+		self._pos.y = math.approach(self._pos.y, ty - self:getHeight()/2, math.abs(ty - self:getHeight()/2 - self._pos.y)*20*dt)
 		
 	end
 	
