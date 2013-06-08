@@ -3,15 +3,7 @@ require("game/input_constants")
 require("game/sprite_layouts")
 require("game/ai_machines")
 
-require("game/classes/rpgplayer")
-require("game/classes/zombie")
-require("game/classes/speechbubble")
-require("game/classes/npc")
-require("game/classes/obstacle")
-require("game/classes/zombiespawn")
-
-local camera_margin = 128
-local copout_img
+require("game/classes/spaceplayer")
 
 function game.load()
 	
