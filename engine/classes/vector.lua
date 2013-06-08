@@ -70,10 +70,9 @@ function Vector:rotate( r )
 	local ang = self:angle()
 	
 	ang = angle.rotate( ang, r )
-	
-	local new = angle.forward( ang ) * length
-	self.x = new.x
-	self.y = new.y
+	self.x = math.cos(ang) * length
+	self.y = math.sin(ang) * length
+	return self
 	
 end
 

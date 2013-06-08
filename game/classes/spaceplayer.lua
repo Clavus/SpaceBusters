@@ -37,8 +37,6 @@ function SpacePlayer:update( dt )
 		--self._body:setLinearVelocity( forward.x, forward.y )
 		self._body:applyForce( forward.x, forward.y )
 		
-		
-		
 	elseif (input:keyIsDown(INPUT.BACKWARD)) then
 		
 	end
@@ -48,7 +46,6 @@ function SpacePlayer:update( dt )
 	elseif (input:keyIsDown(INPUT.TURNRIGHT)) then
 		self:setAngle(self:getAngle() + math.pi/1.5*dt)
 	end
-	
 	
 end
 
