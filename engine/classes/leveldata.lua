@@ -17,15 +17,17 @@ function LevelData:initialize()
 		--[[
 		{
 			name = "layername",
-			type = <layer type>, -- LAYER_TYPE_IMAGES, LAYER_TYPE_BATCH, LAYER_TYPE_BACKGROUND
+			type = <layer type>, -- LAYER_TYPE_IMAGES, LAYER_TYPE_BATCH, LAYER_TYPE_BACKGROUND, LAYER_TYPE_CUSTOM
 			opacity = 1,
 			x = 0,
 			y = 0,
-			scale = Vector(1,1)
+			scale = Vector(1,1),
 			angle = 0,
 			parallax = 1,
 			properties = {},
-			drawFunc = function(layer, camera) end -- mostly used for debug drawing, is drawn AFTER everything else in the layer
+			
+			-- LAYER_TYPE_CUSTOM only:
+			drawFunc = function(layer, camera) end -- draw function
 			
 			-- LAYER_TYPE_BACKGROUND only:
 			background_image = image = Image(),

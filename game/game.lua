@@ -37,15 +37,33 @@ function game.load()
 			background_quad = love.graphics.newQuad(0, 0, camera:getBackgroundQuadWidth(), camera:getBackgroundQuadHeight(), bkg_img:getWidth(), bkg_img:getHeight())
 		})
 	table.insert(ldata.layers, {
-			name = "block", opacity = 0.33, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0.5, properties = {},
-			type = LAYER_TYPE_NONE,
+			name = "block1", opacity = 0.33, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0.5, properties = {},
+			type = LAYER_TYPE_CUSTOM,
 			drawFunc = function(layer, camera)
 				camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
 				love.graphics.rectangle( "fill", 0, 0, 1024, 1024 )
 				camera:postDraw()
 			end
 		})
-		
+	table.insert(ldata.layers, {
+			name = "block2", opacity = 1, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 1, properties = {},
+			type = LAYER_TYPE_CUSTOM,
+			drawFunc = function(layer, camera)
+				camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+				love.graphics.setColor( 255, 200, 200, 200 )
+				love.graphics.rectangle( "fill", 100, 100, 128, 128 )
+				love.graphics.setColor( 200, 255, 200, 200 )
+				love.graphics.rectangle( "fill", 300, 100, 128, 128 )
+				love.graphics.setColor( 200, 200, 255, 200 )
+				love.graphics.rectangle( "fill", 300, 300, 128, 128 )
+				
+				local tx, ty = camera:getTargetPos()
+				love.graphics.setColor( 255, 30, 30, 200 )
+				love.graphics.circle( "fill", tx, ty, 24, 16 )
+				camera:postDraw()
+			end
+		})
+	
 	print("Game initialized")
 	
 end
@@ -56,6 +74,12 @@ function game.update( dt )
 		camera:setAngle(camera:getAngle() - math.pi/12 * dt)
 	elseif (input:keyIsDown("right")) then
 		camera:setAngle(camera:getAngle() + math.pi/12 * dt)
+	end
+	
+	if (input:mouseIsPressed(MOUSE.WHEELDOWN)) then
+		camera:setScale(camera:getScale() - 0.05)
+	elseif (input:mouseIsPressed(MOUSE.WHEELUP)) then
+		camera:setScale(camera:getScale() + 0.05)
 	end
 	
 	level:update( dt )
