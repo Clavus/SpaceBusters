@@ -31,7 +31,9 @@ function LevelData:initialize()
 			
 			-- LAYER_TYPE_BACKGROUND only:
 			background_image = image = Image(),
-			background_quad = quad = Quad()
+			background_view_w = img:getWidth(), -- quad size on image
+			background_view_h = img:getHeight(),
+			background_cam_scalar = 0 -- how much it scales with the camera scale, 0 means independent, 1 means same scale
 			
 			-- LAYER_TYPE_IMAGES only:
 			images = {

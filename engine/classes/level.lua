@@ -45,10 +45,10 @@ function Level:draw()
 
 	self._camera:preDraw()
 	self._entManager:preDraw()
-	self._camera:postDraw()
 
 	local cx, cy = self._camera:getPos()
 	local cw, ch = self._camera:getWidth(), self._camera:getHeight()
+	local csx, csy = self._camera:getScale()
 	local cbw, cbh = self._camera:getBackgroundQuadWidth(), self._camera:getBackgroundQuadHeight()
 	
 	for k, layer in ipairs( self._leveldata:getLayers() ) do
@@ -57,7 +57,6 @@ function Level:draw()
 		
 		if (layer.type == LAYER_TYPE_IMAGES) then -- draw image layer (usually background objects)
 			
-			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
 			for i, img in pairs(layer.images) do
 				if (img.quad) then
 					love.graphics.drawq(img.image, img.quad, img.x, img.y, img.angle, img.scale.x, img.scale.y, img.origin.x, img.origin.y )
@@ -67,43 +66,50 @@ function Level:draw()
 				
 			end
 			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
-			self._camera:postDraw()
-		
+			
 		elseif (layer.type == LAYER_TYPE_BATCH) then -- draw spritebatch layer (usually for tiles)
 			
-			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
 			for i, batch in pairs(layer.batches) do
 				love.graphics.draw(batch)
 			end
 			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
-			self._camera:postDraw()
 			
 		elseif (layer.type == LAYER_TYPE_BACKGROUND) then -- draw repeating background layer
 			
-			self._camera:preDraw(cx, cy, layer.scale.x, layer.scale.y)
+			-- disable camera transform for this
+			self._camera:postDraw()
+			
+			-- reconstruct quad if camera scale changes
+			if (layer.background_quad == nil or layer.background_cam_diagonal ~= self._camera:getDiagonal()) then
+				layer.background_quad = love.graphics.newQuad(0, 0, cbw, cbh, layer.background_view_w, layer.background_view_h)
+				background_cam_diagonal = self._camera:getDiagonal()
+			end
 			
 			local image = layer.background_image
 			local quad = layer.background_quad
 			local x, y, w, h = quad:getViewport()
+			local scalar = layer.background_cam_scalar
+			--self._camera:preDraw(cx + layer.scale.x, cy + layer.scale.y, 1-((csx-1)/csx*(1-scalar)), (1-(csx-1)/csy*(1-scalar)))
+			
 			quad:setViewport((cx + layer.x) * layer.parallax, (cy + layer.y) * layer.parallax, w, h)
 			love.graphics.drawq(image, quad, cw/2, ch/2, 0, 1, 1, cbw/2, cbh/2)
-			self._camera:postDraw()
 			
-			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+			self._camera:preDraw()
+			
 			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
-			self._camera:postDraw()
 			
 		elseif (layer.type == LAYER_TYPE_CUSTOM) then
-		
+			
+			love.graphics.push()
+			love.graphics.translate(cx*(1-layer.parallax), cy*(1-layer.parallax))
 			layer:drawFunc(self._camera)
+			love.graphics.pop()
 			
 		end
 		
 	end
 	
 	love.graphics.setColor(255,255,255,255)
-	
-	self._camera:preDraw()
 	self._entManager:postDraw()
 	self._camera:postDraw()
 	

@@ -17,6 +17,9 @@ function Camera:initialize()
 	self._easingstart = -100
 	self._easingduration = 2
 	
+	self._diagonal = 0
+	self:updateDiagonal()
+	
 end
 
 function Camera:update(dt)
@@ -34,8 +37,8 @@ function Camera:update(dt)
 	elseif (self._mode == "track") then
 		
 		local tx, ty = self:getTargetPos()
-		self._pos.x = math.approach(self._pos.x, tx - self:getWidth()/2, math.abs(tx - self:getWidth()/2 - self._pos.x)*20*dt)
-		self._pos.y = math.approach(self._pos.y, ty - self:getHeight()/2, math.abs(ty - self:getHeight()/2 - self._pos.y)*20*dt)
+		self._pos.x = math.approach(self._pos.x, tx, math.abs(tx - self._pos.x)*20*dt)
+		self._pos.y = math.approach(self._pos.y, ty, math.abs(ty - self._pos.y)*20*dt)
 		
 	end
 	
@@ -74,20 +77,15 @@ function Camera:moveTo( x, y, duration )
 	
 end
 
-function Camera:preDraw(x, y, sx, sy, angle, parallax)
+function Camera:preDraw()
 	
-	x = x or 0
-	y = y or 0
-	sx = sx or 1
-	sy = sy or 1
-	angle = angle or 0
-	parallax = parallax or 1
+	local tx, ty = self:getWidth()/2*self._scale.x, self:getHeight()/2*self._scale.y
 	
 	love.graphics.push()
-	love.graphics.scale( self._scale.x * sx, self._scale.y * sy )
-	love.graphics.translate( self:getWidth()/2, self:getHeight()/2 ) -- rotate around camera center
-	love.graphics.rotate( self._angle + angle )
-	love.graphics.translate( math.round((-self._pos.x + x)*parallax)-self:getWidth()/2, math.round((-self._pos.y + y)*parallax)-self:getHeight()/2 )
+	love.graphics.translate( tx, ty )
+	love.graphics.scale( self._scale.x, self._scale.y )
+	love.graphics.rotate( self._angle )
+	love.graphics.translate( math.round(-self._pos.x), math.round(-self._pos.y) )
 	
 end
 
@@ -111,8 +109,14 @@ end
 
 function Camera:getDiagonal()
 	
+	return self._diagonal
+	
+end
+
+function Camera:updateDiagonal()
+	
 	local w, h = self:getWidth(), self:getHeight()
-	return math.sqrt(w*w+h*h)
+	self._diagonal = math.sqrt(w*w+h*h)
 	
 end
 
@@ -153,12 +157,13 @@ function Camera:setScale( x, y )
 	y = y or x
 	self._scale.x = x
 	self._scale.y = y
-
+	self:updateDiagonal()
+	
 end
 
 function Camera:getScale()
 
-	return self_scale
+	return self._scale.x, self._scale.y
 
 end
 
