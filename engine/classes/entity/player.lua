@@ -14,7 +14,9 @@ function Player:initialize( world )
 end
 
 function Player:draw()
-
+	
+	love.graphics.setLineWidth( 2 )
+	love.graphics.setColor(255,255,255,255)
 	love.graphics.circle("line", 
 			self._body:getX(), 
 			self._body:getY(), 
