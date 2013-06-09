@@ -10,8 +10,11 @@ local player, world, camera
 
 function game.load()
 	
+	
+	local ldata = LevelData()
+	
 	gui = GUI()
-	level = Level(LevelData())
+	level = Level(ldata)
 	level:setCollisionCallbacks(game.collisionBeginContact, game.collisionEndContact, game.collisionPreSolve, game.collisionPostSolve)
 	world = level:getPhysicsWorld()
 	camera = level:getCamera()
@@ -20,20 +23,41 @@ function game.load()
 	player:setPos( 500, 500 )
 	
 	camera:track(player)
+	camera:setScale(0.2)
 	
 	input:addKeyReleaseCallback("restart", "r", function() love.load() end)
 	
-	camera:setScale(0.333)
-	
+	-- TEMP
 	bkg_img = resource.getImage(FOLDER.ASSETS.."background_test.jpg", "repeat")
-	bkg_quad = love.graphics.newQuad(0, 0, camera:getWidth(), camera:getHeight(), bkg_img:getWidth(), bkg_img:getHeight())
 	
+	table.insert(ldata.layers, {
+			name = "stars", opacity = 1, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0.1, properties = {},
+			type = LAYER_TYPE_BACKGROUND,
+			background_image = bkg_img,
+			background_quad = love.graphics.newQuad(0, 0, camera:getBackgroundQuadWidth(), camera:getBackgroundQuadHeight(), bkg_img:getWidth(), bkg_img:getHeight())
+		})
+	table.insert(ldata.layers, {
+			name = "block", opacity = 0.33, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0.5, properties = {},
+			type = LAYER_TYPE_NONE,
+			drawFunc = function(layer, camera)
+				camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+				love.graphics.rectangle( "fill", 0, 0, 1024, 1024 )
+				camera:postDraw()
+			end
+		})
+		
 	print("Game initialized")
 	
 end
 
 function game.update( dt )
-
+	
+	if (input:keyIsDown("left")) then
+		camera:setAngle(camera:getAngle() - math.pi/12 * dt)
+	elseif (input:keyIsDown("right")) then
+		camera:setAngle(camera:getAngle() + math.pi/12 * dt)
+	end
+	
 	level:update( dt )
 	gui:update( dt )
 	

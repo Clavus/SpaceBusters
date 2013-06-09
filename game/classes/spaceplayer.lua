@@ -5,7 +5,7 @@ function SpacePlayer:initialize( world )
 
 	Entity.initialize(self)
 
-	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."playership.png", Vector(0,0), Vector(96, 96), Vector(48, 48) )
+	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."playership.png", Vector(0,0), Vector(256, 256), Vector(128, 128) )
 	self.velocity = Vector(0,0)
 	self.move_speed = 196
 	
@@ -24,8 +24,8 @@ function SpacePlayer:update( dt )
 	
 	self._charsprite:update(dt)
 	local v = Vector(self._body:getLinearVelocity())
-	if (v:length() > 2000) then
-		v:normalize():multiplyBy(2000)
+	if (v:length() > 1000) then
+		v:normalize():multiplyBy(1000)
 		self._body:setLinearVelocity( v.x, v.y )
 	end
 	
@@ -33,7 +33,7 @@ function SpacePlayer:update( dt )
 	
 	if (input:keyIsDown(INPUT.FORWARD)) then
 		
-		local forward = angle.forward( self:getAngle() ) * 30000
+		local forward = angle.forward( self:getAngle() ) * 10000
 		--self._body:setLinearVelocity( forward.x, forward.y )
 		self._body:applyForce( forward.x, forward.y )
 		
@@ -42,9 +42,9 @@ function SpacePlayer:update( dt )
 	end
 	
 	if (input:keyIsDown(INPUT.TURNLEFT)) then
-		self:setAngle(self:getAngle() - math.pi/1.5*dt)
+		self:setAngle(self:getAngle() - math.pi/1.2*dt)
 	elseif (input:keyIsDown(INPUT.TURNRIGHT)) then
-		self:setAngle(self:getAngle() + math.pi/1.5*dt)
+		self:setAngle(self:getAngle() + math.pi/1.2*dt)
 	end
 	
 end

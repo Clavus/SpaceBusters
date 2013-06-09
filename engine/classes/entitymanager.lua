@@ -63,21 +63,23 @@ function EntityManager:preDraw()
 	-- created sorted drawing lists per layer for entities
 	if (self._update_drawlist) then
 	
-		self._drawlist = { _final = {} }
-		local layer
+		self._drawlist = { _first = {}, _final = {} }
+		local layername
 		local campos = Vector(level:getCamera():getTargetPos())
 		
 		for k, ent in pairs( self._entities ) do
 			
 			if (level:isRectInActiveArea(campos, ent:getDrawBoundingBox())) then
-				layer = ent:getDrawLayer()
-				if (layer == DRAW_LAYER_TOP) then
+				layername = ent:getDrawLayer()
+				if (layername == DRAW_LAYER_BOTTOM) then
+					table.insert(self._drawlist._first, ent)
+				elseif (layername == DRAW_LAYER_TOP) then
 					table.insert(self._drawlist._final, ent)
 				else
-					if not self._drawlist[layer] then
-						self._drawlist[layer] = {} 
+					if not self._drawlist[layername] then
+						self._drawlist[layername] = {} 
 					end
-					table.insert(self._drawlist[layer], ent)
+					table.insert(self._drawlist[layername], ent)
 				end
 			end
 			
@@ -89,6 +91,10 @@ function EntityManager:preDraw()
 	-- sort entities by depth
 	for k, v in pairs( self._drawlist ) do
 		table.sort( self._drawlist[k], function(a, b) return a:getDepth() > b:getDepth() end )
+	end
+	
+	for i, ent in ipairs( self._drawlist._first ) do
+		ent:draw()
 	end
 	
 end

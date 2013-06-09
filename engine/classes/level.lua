@@ -44,22 +44,82 @@ end
 function Level:draw()
 
 	self._camera:preDraw()
-	game.drawBackground()
 	self._entManager:preDraw()
+	self._camera:postDraw()
+
+	local cx, cy = self._camera:getPos()
+	local ca = self._camera:getAngle()
+	local cw, ch = self._camera:getWidth(), self._camera:getHeight()
+	local cbw, cbh = self._camera:getBackgroundQuadWidth(), self._camera:getBackgroundQuadHeight()
 	
 	for k, layer in ipairs( self._leveldata:getLayers() ) do
-	
-		for i, batch in pairs(layer.batches) do
-			love.graphics.draw(batch)
+		
+		love.graphics.setColor(255,255,255,255*layer.opacity)
+		
+		if (layer.type == LAYER_TYPE_IMAGES) then -- draw image layer (usually background objects)
+			
+			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+			for i, img in pairs(layer.images) do
+				if (img.quad) then
+					love.graphics.drawq(img.image, img.quad, img.x, img.y, img.angle, img.scale.x, img.scale.y, img.origin.x, img.origin.y )
+				else
+					love.graphics.draw(img.image, img.x, img.y, img.angle, img.scale.x, img.scale.y, img.origin.x, img.origin.y )
+				end
+				
+			end
+			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
+			self._camera:postDraw()
+		
+		elseif (layer.type == LAYER_TYPE_BATCH) then -- draw spritebatch layer (usually for tiles)
+			
+			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+			for i, batch in pairs(layer.batches) do
+				love.graphics.draw(batch)
+			end
+			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
+			self._camera:postDraw()
+			
+		elseif (layer.type == LAYER_TYPE_BACKGROUND) then -- draw repeating background layer
+			
+			self._camera:preDraw(cx, cy, layer.scale.x, layer.scale.y)
+			
+			local image = layer.background_image
+			local quad = layer.background_quad
+			local x, y, w, h = quad:getViewport()
+			quad:setViewport((cx + layer.x) * layer.parallax, (cy + layer.y) * layer.parallax, w, h)
+			love.graphics.drawq(image, quad, cw/2, ch/2, ca, 1, 1, cbw/2, cbh/2)
+			self._camera:postDraw()
+			
+			self._camera:preDraw(layer.x, layer.y, layer.scale.x, layer.scale.y, layer.angle, layer.parallax)
+			self._entManager:draw(layer.name) -- draw entities that are to be drawn on this layer
+			self._camera:postDraw()
+			
+		end
+
+		if (layer.drawFunc) then
+			layer:drawFunc(self._camera)
 		end
 		
-		-- draw entities that are to be drawn after this layer
-		self._entManager:draw(layer.name)
-		
 	end
+
+	self._camera:preDraw()
+	
+	love.graphics.setColor( 255, 200, 200, 200 )
+	love.graphics.rectangle( "fill", 100, 100, 128, 128 )
+	love.graphics.setColor( 200, 255, 200, 200 )
+	love.graphics.rectangle( "fill", 300, 100, 128, 128 )
+	love.graphics.setColor( 200, 200, 255, 200 )
+	love.graphics.rectangle( "fill", 300, 300, 128, 128 )
+	
+	local tx, ty = self._camera:getTargetPos()
+	love.graphics.setColor( 255, 30, 30, 200 )
+	love.graphics.circle( "fill", tx, ty, 24, 16 )
+	
+	love.graphics.setColor(255,255,255,255)
 	
 	self._entManager:postDraw()
 	self._camera:postDraw()
+	
 	
 end
 

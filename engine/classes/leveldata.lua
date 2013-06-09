@@ -17,8 +17,36 @@ function LevelData:initialize()
 		--[[
 		{
 			name = "layername",
+			type = <layer type>, -- LAYER_TYPE_IMAGES, LAYER_TYPE_BATCH, LAYER_TYPE_BACKGROUND
 			opacity = 1,
+			x = 0,
+			y = 0,
+			scale = Vector(1,1)
+			angle = 0,
+			parallax = 1,
 			properties = {},
+			drawFunc = function(layer, camera) end -- mostly used for debug drawing, is drawn AFTER everything else in the layer
+			
+			-- LAYER_TYPE_BACKGROUND only:
+			background_image = image = Image(),
+			background_quad = quad = Quad()
+			
+			-- LAYER_TYPE_IMAGES only:
+			images = {
+				{
+					x = 0,
+					y = 0,
+					angle = 0,
+					scale = Vector(1,1),
+					origin = Vector(0,0),
+					image = Image(),
+					quad = Quad()
+				},
+				...
+			}
+			
+			-- LAYER_TYPE_BATCH only:
+			batches = { SpriteBatch(), ... }
 			tiles = {
 				{ 
 					tileset = { [tileset table (self.tilesets[x])] },
@@ -28,6 +56,7 @@ function LevelData:initialize()
 				},
 				...
 			}
+			
 		},
 		...
 		]]--

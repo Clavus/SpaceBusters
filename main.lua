@@ -29,10 +29,9 @@ end
 
 function love.draw()
 	
-	love.graphics.setBackgroundColor( 0, 0, 0 )
+	love.graphics.setBackgroundColor( 30, 30, 40 )
 	love.graphics.clear()
 	game.draw()
-	
 	love.graphics.setCaption("Space Busters ("..love.timer.getFPS().." fps)")
 	
 end

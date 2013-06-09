@@ -74,12 +74,20 @@ function Camera:moveTo( x, y, duration )
 	
 end
 
-function Camera:preDraw()
+function Camera:preDraw(x, y, sx, sy, angle, parallax)
+	
+	x = x or 0
+	y = y or 0
+	sx = sx or 1
+	sy = sy or 1
+	angle = angle or 0
+	parallax = parallax or 1
 	
 	love.graphics.push()
-	love.graphics.scale( self._scale.x, self._scale.y )
-	love.graphics.rotate( self._angle )
-	love.graphics.translate( math.round(-self._pos.x), math.round(-self._pos.y) )
+	love.graphics.scale( self._scale.x * sx, self._scale.y * sy )
+	love.graphics.translate( self:getWidth()/2, self:getHeight()/2 ) -- rotate around camera center
+	love.graphics.rotate( self._angle + angle )
+	love.graphics.translate( math.round((-self._pos.x + x)*parallax)-self:getWidth()/2, math.round((-self._pos.y + y)*parallax)-self:getHeight()/2 )
 	
 end
 
@@ -98,6 +106,35 @@ end
 function Camera:getHeight()
 	
 	return love.graphics.getHeight() / self._scale.y
+	
+end
+
+function Camera:getDiagonal()
+	
+	local w, h = self:getWidth(), self:getHeight()
+	return math.sqrt(w*w+h*h)
+	
+end
+
+function Camera:getBackgroundQuadWidth()
+	
+	local w, h = self:getWidth(), self:getHeight()
+	if (w > h) then
+		return w/h*self:getDiagonal()
+	else
+		return self:getDiagonal()
+	end
+	
+end
+
+function Camera:getBackgroundQuadHeight()
+	
+	local w, h = self:getWidth(), self:getHeight()
+	if (w > h) then
+		return self:getDiagonal()
+	else
+		return h/w*self:getDiagonal()
+	end
 	
 end
 
