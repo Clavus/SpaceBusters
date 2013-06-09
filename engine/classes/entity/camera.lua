@@ -17,6 +17,9 @@ function Camera:initialize()
 	self._easingstart = -100
 	self._easingduration = 2
 	
+	self._targetscale = Vector(1,1)
+	self._scalespeed = 1
+	
 	self._diagonal = 0
 	self:updateDiagonal()
 	
@@ -42,9 +45,8 @@ function Camera:update(dt)
 		
 	end
 	
-	--self._pos.x = self._pos.x + 50*dt
-	--self._scale.x = 1 + 0.5*math.sin(engine.currentTime())
-	--self._scale.y = 1 + 0.5*math.sin(engine.currentTime())
+	self._scale.x = math.approach(self._scale.x, self._targetscale.x, self._scalespeed*dt)
+	self._scale.y = math.approach(self._scale.y, self._targetscale.y, self._scalespeed*dt)
 	
 end
 
@@ -74,6 +76,19 @@ function Camera:moveTo( x, y, duration )
 	self._refpos = self._pos:copy()
 	self._easingstart = engine.currentTime()
 	self._easingduration = duration
+	
+end
+
+function Camera:getTargetScale()
+	
+	return self._targetscale.x, self._targetscale.y
+	
+end
+
+function Camera:scaleTo( sx, sy )
+	
+	self._targetscale.x = sx
+	self._targetscale.y = sy or sx
 	
 end
 
@@ -157,6 +172,8 @@ function Camera:setScale( x, y )
 	y = y or x
 	self._scale.x = x
 	self._scale.y = y
+	self._targetscale.x = x
+	self._targetscale.y = y
 	self:updateDiagonal()
 	
 end

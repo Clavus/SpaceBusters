@@ -78,7 +78,7 @@ end
 
 function InputController:handle_mousepressed(x, y, button)
 	
-	print("mouse "..tostring(button).." pressed "..engine.currentTime())
+	--print("mouse "..tostring(button).." pressed "..engine.currentTime())
 	self._mousepressed[button] = true
 	self._mousedown[button] = { x = x, y = y, time = engine.currentTime() }
 	
@@ -92,7 +92,7 @@ end
 
 function InputController:handle_mousereleased(x, y, button)
 	
-	print("mouse "..tostring(button).." released "..engine.currentTime())
+	--print("mouse "..tostring(button).." released "..engine.currentTime())
 	self._mousereleased[button] = true
 	
 	if (self._mousereleasecalls[button]) then

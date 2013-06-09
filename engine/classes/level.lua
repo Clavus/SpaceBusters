@@ -48,6 +48,7 @@ function Level:draw()
 
 	local cx, cy = self._camera:getPos()
 	local cw, ch = self._camera:getWidth(), self._camera:getHeight()
+	local ca = self._camera:getAngle()
 	local csx, csy = self._camera:getScale()
 	local cbw, cbh = self._camera:getBackgroundQuadWidth(), self._camera:getBackgroundQuadHeight()
 	
@@ -90,9 +91,17 @@ function Level:draw()
 			local x, y, w, h = quad:getViewport()
 			local scalar = layer.background_cam_scalar
 			--self._camera:preDraw(cx + layer.scale.x, cy + layer.scale.y, 1-((csx-1)/csx*(1-scalar)), (1-(csx-1)/csy*(1-scalar)))
+			local tx, ty = cw/2*csx, ch/2*csy
+	
+			love.graphics.push()
+			love.graphics.translate( tx, ty )
+			love.graphics.rotate( ca )
+			love.graphics.translate( -tx, -ty )
 			
-			quad:setViewport((cx + layer.x) * layer.parallax, (cy + layer.y) * layer.parallax, w, h)
-			love.graphics.drawq(image, quad, cw/2, ch/2, 0, 1, 1, cbw/2, cbh/2)
+			quad:setViewport((cx + layer.x) * csx * layer.parallax, (cy + layer.y) * csy * layer.parallax, w, h)
+			love.graphics.drawq(image, quad, cw*csx, ch*csy, 0, 1, 1, cbw/2, cbh/2)
+			
+			love.graphics.pop()
 			
 			self._camera:preDraw()
 			

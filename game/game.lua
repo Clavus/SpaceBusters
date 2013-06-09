@@ -20,7 +20,7 @@ function game.load()
 	camera = level:getCamera()
 	
 	player = level:createEntity("SpacePlayer", world)
-	player:setPos( 500, 500 )
+	player:setPos( -100, 0 )
 	
 	camera:track(player)
 	camera:setScale(0.2)
@@ -31,7 +31,7 @@ function game.load()
 	bkg_img = resource.getImage(FOLDER.ASSETS.."background_test.jpg", "repeat")
 	
 	table.insert(ldata.layers, {
-			name = "stars", opacity = 1, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0, properties = {},
+			name = "stars", opacity = 1, x = 0, y = 0, scale = Vector(1,1), angle = 0, parallax = 0.05, properties = {},
 			type = LAYER_TYPE_BACKGROUND,
 			background_image = bkg_img,
 			background_view_w = bkg_img:getWidth(),
@@ -74,10 +74,12 @@ function game.update( dt )
 		camera:setAngle(camera:getAngle() + math.pi/12 * dt)
 	end
 	
+	local tsx, tsy = camera:getTargetScale()
+	
 	if (input:mouseIsReleased(MOUSE.WHEELUP)) then
-		camera:setScale(math.max(0.04,camera:getScale() - 0.02))
+		camera:scaleTo(math.max(0.04,tsx - 0.02))
 	elseif (input:mouseIsReleased(MOUSE.WHEELDOWN)) then
-		camera:setScale(math.min(camera:getScale() + 0.02, 10))
+		camera:scaleTo(math.min(tsy + 0.02, 10))
 	end
 	
 	level:update( dt )
