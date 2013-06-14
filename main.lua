@@ -9,7 +9,7 @@ assertDebug = function() end
 
 function love.load()
 	
-	-- Disable this on release
+	-- Disable this on release, removes unnecessary asserts
 	assertDebug = assert
 	
 	_curTime = 0

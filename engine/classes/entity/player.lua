@@ -6,11 +6,11 @@ function Player:initialize( world )
 	
 	Entity.initialize(self)
 	
-	self:initializeBody()
+	self:initializeBody( world )
 	
 end
 
-function Player:initializeBody()
+function Player:initializeBody( world )
 	
 	self._body = love.physics.newBody(world, 0, 0, "dynamic")
 	self._body:setMass(1)

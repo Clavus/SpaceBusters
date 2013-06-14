@@ -3,7 +3,7 @@ SpacePlayer = class("SpacePlayer", Player)
 
 function SpacePlayer:initialize( world )
 
-	Entity.initialize(self)
+	Player.initialize(self, world)
 
 	self._charsprite = StateAnimatedSprite( SPRITELAYOUT["ship_test"], FOLDER.ASSETS.."playership.png", Vector(0,0), Vector(256, 256), Vector(128, 128) )
 	self._booster_psystem = love.graphics.newParticleSystem( resource.getImage(FOLDER.ASSETS.."pixel.png"), 500 )
@@ -11,12 +11,6 @@ function SpacePlayer:initialize( world )
 	self.velocity = Vector(0,0)
 	self.max_move_speed = 1500
 	self.propulsion_force = 15000
-	
-	self._body = love.physics.newBody(world, 0, 0, "dynamic")
-	self._body:setMass(10)
-	self._shape = love.physics.newCircleShape(0, 16, 16)
-	self._fixture = love.physics.newFixture(self._body, self._shape)
-	self._fixture:setUserData(self)
 	
 	self._animstate = "default"
 	self._charsprite:setState(self._animstate)
@@ -34,6 +28,16 @@ function SpacePlayer:initialize( world )
 	system:setSpread( math.rad(180) )
 	system:setRotation( math.rad(0), math.rad(60) )
 	system:setSpin( math.rad(0), math.rad(10), 1 )
+	
+end
+
+function SpacePlayer:initializeBody( world )
+	
+	self._body = love.physics.newBody(world, 0, 0, "dynamic")
+	self._body:setMass(10)
+	self._shape = love.physics.newCircleShape(0, 16, 16)
+	self._fixture = love.physics.newFixture(self._body, self._shape)
+	self._fixture:setUserData(self)
 	
 end
 
