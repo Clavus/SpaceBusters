@@ -1,9 +1,8 @@
 
 local bkg_img, bkg_quad
-local player, world, camera
+local player, planet, world, camera
 
 function game.load()
-	
 	
 	local ldata = LevelData()
 	
@@ -15,6 +14,9 @@ function game.load()
 	
 	player = level:createEntity("SpacePlayer", world)
 	player:setPos( -100, 0 )
+	
+	planet = level:createEntity("Planet", world, 10000, 500)
+	planet:setPos( 10500, 10500 )
 	
 	camera:track(player)
 	camera:setScale(0.2)

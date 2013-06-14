@@ -35,7 +35,8 @@ function SpacePlayer:initializeBody( world )
 	
 	self._body = love.physics.newBody(world, 0, 0, "dynamic")
 	self._body:setMass(10)
-	self._shape = love.physics.newCircleShape(0, 16, 16)
+	self._body:setAngularDamping( 10 )
+	self._shape = love.physics.newCircleShape(0, 32, 32)
 	self._fixture = love.physics.newFixture(self._body, self._shape)
 	self._fixture:setUserData(self)
 	
