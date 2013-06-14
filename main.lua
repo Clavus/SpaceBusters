@@ -1,8 +1,8 @@
 
 game = {}
 engine = {}
-require("engine/engine")
-require("game/game")
+require("engine/engine_includes")
+require("game/game_includes")
 
 local _curTime
 assertDebug = function() end
