@@ -1,12 +1,19 @@
 
 Wall = class("Wall", Entity)
+Wall:include(PhysicsActor)
 
 function Wall:initialize( world )
 	
 	Entity.initialize(self)
 	
-	self._body = love.physics.newBody(world, 0, 0, "static")
+	self:initializeBody()
 
+end
+
+function Wall:initializeBody()
+	
+	self._body = love.physics.newBody(world, 0, 0, "static")
+	
 end
 
 function Wall:buildFromSquare(w, h)
@@ -40,14 +47,3 @@ function Wall:draw()
 end
 ]]--
 
-function Wall:setPos( vec )
-
-	self._body:setPosition(vec.x, vec.y)
-
-end
-
-function Wall:getPos()
-
-	return Vector(self._body:getPosition())
-	
-end

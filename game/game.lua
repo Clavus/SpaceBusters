@@ -4,6 +4,7 @@ require("game/sprite_layouts")
 require("game/ai_machines")
 
 require("game/classes/spaceplayer")
+require("game/classes/planet")
 
 local bkg_img, bkg_quad
 local player, world, camera

@@ -13,6 +13,7 @@ require("engine/util/easing")
 require("engine/util/timer")
 
 require("engine/classes/mixins/collisionresolver")
+require("engine/classes/mixins/physicsactor")
 
 require("engine/classes/vector")
 require("engine/classes/sprite")
